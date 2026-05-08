@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostBoard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- AUTH SECTION -->
+    <div id="auth-section" class="screen active">
+        <div class="auth-bg">
+            <div class="blob b1"></div>
+            <div class="blob b2"></div>
+            <div class="blob b3"></div>
+        </div>
+        <div class="auth-container">
+            <div class="brand">
+                <span class="brand-dot"></span>
+                <h1>PostBoard</h1>
+            </div>
+            <p class="brand-tagline">Share your thoughts with the world.</p>
+
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+                <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="you@example.com" required />
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required />
+                </div>
+                <button type="submit" class="btn-primary" id="login-btn">
+                    <span>Sign In</span>
+                    <div class="btn-loader hidden"></div>
+                </button>
+                <div id="login-error" class="form-msg error hidden"></div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+                <div class="field">
+                    <label>Full Name</label>
+                    <input type="text" id="reg-name" placeholder="John Doe" required />
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" placeholder="you@example.com" required />
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" placeholder="••••••••" required />
+                </div>
+                <div class="field">
+                    <label>Confirm Password</label>
+                    <input type="password" id="reg-confirm" placeholder="••••••••" required />
+                </div>
+                <button type="submit" class="btn-primary" id="register-btn">
+                    <span>Create Account</span>
+                    <div class="btn-loader hidden"></div>
+                </button>
+                <div id="register-error" class="form-msg error hidden"></div>
+                <div id="register-success" class="form-msg success hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboard-section" class="screen">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="brand-dot"></span>
+                <span>PostBoard</span>
+            </div>
+            <div class="nav-right">
+                <span id="nav-user-name" class="nav-username"></span>
+                <button class="btn-ghost" onclick="handleLogout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Your Feed</h2>
+                    <p id="post-count-label" class="subtle">Loading posts…</p>
+                </div>
+                <button class="btn-primary" onclick="openModal()">+ New Post</button>
+            </div>
+
+            <div id="posts-grid" class="posts-grid">
+                <!-- posts inserted here -->
+            </div>
+
+            <div id="posts-empty" class="empty-state hidden">
+                <div class="empty-icon">📝</div>
+                <p>No posts yet. Be the first to share something!</p>
+            </div>
+
+            <div id="posts-loader" class="loader-wrap">
+                <div class="spinner"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CREATE / EDIT MODAL -->
+    <div id="post-modal" class="modal-overlay hidden" onclick="closeModalOutside(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">New Post</h3>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <form onsubmit="handlePostSubmit(event)">
+                <div class="field">
+                    <label>Title</label>
+                    <input type="text" id="post-title" placeholder="Give your post a title…" required />
+                </div>
+                <div class="field">
+                    <label>Content</label>
+                    <textarea id="post-content" placeholder="What's on your mind?" rows="5"></textarea>
+                </div>
+                <div id="post-error" class="form-msg error hidden"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" id="post-submit-btn">
+                        <span id="post-submit-label">Publish</span>
+                        <div class="btn-loader hidden"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL -->
+    <div id="delete-modal" class="modal-overlay hidden" onclick="closeDeleteOutside(event)">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3>Delete Post?</h3>
+                <button class="close-btn" onclick="closeDeleteModal()">✕</button>
+            </div>
+            <p class="subtle" style="margin: 0 0 1.5rem;">This action cannot be undone.</p>
+            <div class="modal-footer">
+                <button class="btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" id="confirm-delete-btn" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
